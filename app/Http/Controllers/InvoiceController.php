@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Helpers\ApiTransitionHelper;
 use App\Models\Invoice;
 use Illuminate\Http\Request;
 
@@ -12,15 +11,6 @@ class InvoiceController extends Controller
 
     public function getInvoices(Request $request)
     {
-        /** this section is to check whether the api is in the new module
-        // if not we use the old module
-        // if the api has been transitioned we will proceed with the new service
-        // this will be eventually converted to a middleware for easily attaching to all request */
-        $request_route_name = $request->route()->action['as'];
-        if (! ApiTransitionHelper::isServiceTransitioned($request_route_name)) {
-            return "Route this request through the old service";
-        }
-
         $invoices = Invoice::all();
         if (!$invoices->count()) {
             return $this->notFound("You do not have any invoice in the system at the moment");
@@ -55,4 +45,10 @@ class InvoiceController extends Controller
 
         return $this->sendSuccess([]);
     }
+
+    public function unswitched()
+    {
+       return $this->sendSuccess([]);
+    }
+
 }
